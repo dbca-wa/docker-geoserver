@@ -1,4 +1,4 @@
-FROM oscarfonts/geoserver:2.18.1
+FROM oscarfonts/geoserver:2.19.0
 LABEL org.opencontainers.image.source https://github.com/dbca-wa/docker-geoserver
 LABEL maintainer "DBCA ASI <asi@dbca.wa.gov.au>"
 
