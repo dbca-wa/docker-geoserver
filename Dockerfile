@@ -1,4 +1,4 @@
-FROM kartoza/geoserver:2.20.0
+FROM kartoza/geoserver:2.20.1
 LABEL org.opencontainers.image.source https://github.com/dbca-wa/docker-geoserver
 LABEL maintainer "DBCA ASI <asi@dbca.wa.gov.au>"
 
