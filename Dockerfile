@@ -10,3 +10,5 @@ RUN cd /var/local/geoserver-exts; for EXT in ${EXTENSIONS}; do \
         wget --max-redirect=40 ${PLUGIN_URL}/${FNAME}; \
         unzip -d ${EXT} ${FNAME}; rm ${FNAME}; \
     done; mv */*.jar /usr/local/geoserver/WEB-INF/lib
+
+COPY log4j-1.2.17.norce.jar /usr/local/geoserver/WEB-INF/lib/log4j-1.2.17.jar
