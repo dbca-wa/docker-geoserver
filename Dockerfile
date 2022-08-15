@@ -12,3 +12,4 @@ RUN cd /var/local/geoserver-exts; for EXT in ${EXTENSIONS}; do \
     done; mv */*.jar /usr/local/geoserver/WEB-INF/lib
 
 COPY log4j-1.2.17.norce.jar /usr/local/geoserver/WEB-INF/lib/log4j-1.2.17.jar
+RUN rm /usr/local/geoserver/WEB-INF/lib/janino-3.0.8.jar
