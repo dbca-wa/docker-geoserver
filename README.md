@@ -1,7 +1,9 @@
 # docker-geoserver
+
 DBCA focused build of geoserver with opinionated default extensions
 
 Based on [kartoza/docker-geoserver](https://github.com/kartoza/docker-geoserver)
+and [meteofi/docker-geoserver](https://github.com/meteofi/docker-geoserver).
 
 ## Running
 
