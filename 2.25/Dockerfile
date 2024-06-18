@@ -13,7 +13,9 @@ ENV \
     COMMUNITY_PLUGINS_DIR=/geoserver/community_plugins  \
     EXTRA_CONFIG_DIR=/geoserver/extra_settings \
     STABLE_PLUGINS_DIR=/geoserver/stable_plugins \
-    RUN_AS_ROOT=true
+    RUN_AS_ROOT=true \
+    LOG_MAX_FILE_SIZE=5MB \
+    LOG_MAX_BACKUP_INDEX=20
 
 run  groupadd -r geoserver -g 1000
 run  useradd -l -m -d /home/geoserver -u 1000 --gid 1000 -s /bin/bash -G geoserver geoserver
@@ -34,6 +36,8 @@ run chown geoserver:geoserver /tomcat_apps.zip && chmod -R 755 /tomcat_apps.zip
 run chown geoserver:geoserver /tmp && chmod -R 777 /tmp
 run chown -R geoserver:geoserver /opt/fonts && chmod -R 775 /opt/fonts
 run chown -R geoserver:geoserver /scripts && chmod -R 775 /scripts
+
+COPY log4j.properties /build_data/log4j.properties
 
 
 USER geoserver
