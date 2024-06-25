@@ -36,6 +36,7 @@ run chown geoserver:geoserver /tomcat_apps.zip && chmod -R 755 /tomcat_apps.zip
 run chown geoserver:geoserver /tmp && chmod -R 777 /tmp
 run chown -R geoserver:geoserver /opt/fonts && chmod -R 775 /opt/fonts
 run chown -R geoserver:geoserver /scripts && chmod -R 775 /scripts
+run chown -R geoserver:geoserver /build_data && chmod -R 775 /build_data
 
 COPY log4j.properties /build_data/log4j.properties
 
