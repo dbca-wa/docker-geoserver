@@ -1,13 +1,11 @@
 # syntax=docker/dockerfile:1
-# Geoserver 2.15+ is tested on Java 11, OpenJDK
-# Reference: https://docs.geoserver.org/stable/en/user/production/java.html
-ARG TOMCAT_VERSION="9-jre11"
+ARG TOMCAT_VERSION="9.0-jre17"
 FROM docker.io/tomcat:$TOMCAT_VERSION
-LABEL maintainer "Ashley Felton <ashley.felton@dbca.wa.gov.au>"
-LABEL org.opencontainers.image.source https://github.com/dbca-wa/docker-geoserver
+LABEL org.opencontainers.image.authors="Ashley Felton <ashley.felton@dbca.wa.gov.au>"
+LABEL org.opencontainers.image.source=https://github.com/dbca-wa/docker-geoserver
 LABEL org.opencontainers.image.description="GeoServer"
 
-ARG GEOSERVER_VERSION="2.24.3"
+ARG GEOSERVER_VERSION="2.24.4"
 ARG GEOSERVER_DATA_DIR="/data/geoserver"
 ARG GEOSERVER_PLUGINS="css geopkg-output printing pyramid vectortiles wps"
 ARG GEOSERVER_FONTS="lato notosans opensans poppins roboto ubuntu"
@@ -95,6 +93,14 @@ COPY <<-EOT $CATALINA_HOME/webapps/ROOT/index.jsp
   response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
   response.setHeader("Location", redirectURL);
 %>
+EOT
+
+COPY <<-EOT $CATALINA_HOME/conf/logging.properties
+# Simplified logging configuration to log everything to console
+handlers = java.util.logging.ConsoleHandler
+java.util.logging.ConsoleHandler.level = INFO
+java.util.logging.ConsoleHandler.formatter = org.apache.juli.OneLineFormatter
+java.util.logging.ConsoleHandler.encoding = UTF-8
 EOT
 
 COPY docker-entrypoint.sh first-run-config.sh /
