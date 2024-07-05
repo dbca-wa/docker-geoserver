@@ -1,4 +1,4 @@
-FROM kartoza/geoserver:2.25.0 as builder_base
+FROM kartoza/geoserver:2.25.2 as builder_base
 MAINTAINER asi@dbca.wa.gov.au
 LABEL org.opencontainers.image.source https://github.com/dbca-wa/docker-geoserver
 
