@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.authors="Ashley Felton <ashley.felton@dbca.wa.gov
 LABEL org.opencontainers.image.source=https://github.com/dbca-wa/docker-geoserver
 LABEL org.opencontainers.image.description="GeoServer"
 
-ARG GEOSERVER_VERSION="2.24.4"
+ARG GEOSERVER_VERSION="2.25.2"
 ARG GEOSERVER_DATA_DIR="/data/geoserver"
 ARG GEOSERVER_PLUGINS="css geopkg-output printing pyramid vectortiles wps"
 ARG GEOSERVER_FONTS="lato notosans opensans poppins roboto ubuntu"
@@ -18,8 +18,8 @@ ENV GEOSERVER_FONTS=${GEOSERVER_FONTS} \
     GEOWEBCACHE_CACHE_DIR='/data/gwc' \
     UMASK=002
 
-# Ref: https://docs.geoserver.org/stable/en/user/production/container.html
-ENV CATALINA_OPTS="-Xms256m -Xmx2g \
+# see https://docs.geoserver.org/stable/en/user/production/container.html
+ENV CATALINA_OPTS="-Xms256m -Xmx4g \
     -Djava.awt.headless=true -server \
     -Dfile.encoding=UTF-8 \
     -Djavax.servlet.request.encoding=UTF-8 \
