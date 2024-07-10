@@ -39,7 +39,8 @@ run chown -R geoserver:geoserver /scripts && chmod -R 775 /scripts
 run chown -R geoserver:geoserver /build_data && chmod -R 775 /build_data
 
 COPY log4j.properties /build_data/log4j.properties
-
+COPY setup.sh /tmp
+RUN /tmp/setup.sh
 
 USER geoserver
 EXPOSE 8080
