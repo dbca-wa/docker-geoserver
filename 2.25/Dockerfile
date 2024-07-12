@@ -3,6 +3,10 @@ FROM kartoza/geoserver:2.25.2 AS builder_base
 LABEL org.opencontainers.image.authors="asi@dbca.wa.gov.au>"
 LABEL org.opencontainers.image.source="https://github.com/dbca-wa/docker-geoserver"
 
+COPY setup.sh /tmp
+RUN /tmp/setup.sh
+RUN rm /tmp/setup.sh
+
 ENV \
     GEOSERVER_UID=1000 \
     GEOSERVER_GID=1000 \
@@ -33,6 +37,9 @@ RUN mkdir -p  /geoserver/stable_plugins && mkdir -p  /geoserver/community_plugin
 
 RUN mkdir -p /usr/share/fonts && chown -R geoserver:geoserver /usr/share/fonts && chmod -R 755 /usr/share/fonts
 
+#update_password.sh has some issues,
+COPY scripts/update_passwords.sh  /scripts
+
 RUN chown geoserver:geoserver /tomcat_apps.zip && chmod -R 755 /tomcat_apps.zip
 RUN chown geoserver:geoserver /tmp && chmod -R 777 /tmp
 RUN chown -R geoserver:geoserver /opt/fonts && chmod -R 775 /opt/fonts
@@ -41,8 +48,6 @@ RUN chown -R geoserver:geoserver /build_data && chmod -R 775 /build_data
 
 COPY log4j.properties /build_data/log4j.properties
 
-COPY setup.sh /tmp
-RUN /tmp/setup.sh
-
 USER geoserver
+
 EXPOSE 8080
