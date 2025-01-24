@@ -38,10 +38,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile
+          context: ${{ env.STABLE_VERSION }}
           platforms: linux/amd64,linux/arm64
-          push: true
-          # push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.metadata.outputs.tags }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.metadata.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.STABLE_VERSION }}
           labels: ${{ steps.metadata.outputs.labels }}
