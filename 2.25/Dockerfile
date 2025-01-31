@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM kartoza/geoserver:2.25.2 AS builder_base
+FROM kartoza/geoserver:2.25.4 AS builder_base
 LABEL org.opencontainers.image.authors="asi@dbca.wa.gov.au>"
 LABEL org.opencontainers.image.source="https://github.com/dbca-wa/docker-geoserver"
 
@@ -8,19 +8,19 @@ RUN /tmp/setup.sh
 RUN rm /tmp/setup.sh
 
 ENV \
-    GEOSERVER_UID=1000 \
-    GEOSERVER_GID=1000 \
-    USER=geoserver \
-    GROUP_NAME=geoserver \
-    GEOSERVER_HOME=/geoserver \
-    GEOSERVER_DATA_DIR=/geoserver/data \
-    GEOWEBCACHE_CACHE_DIR=/geoserver/data/gwc \
-    COMMUNITY_PLUGINS_DIR=/geoserver/community_plugins  \
-    EXTRA_CONFIG_DIR=/geoserver/extra_settings \
-    STABLE_PLUGINS_DIR=/geoserver/stable_plugins \
-    RUN_AS_ROOT=true \
-    LOG_MAX_FILE_SIZE=5MB \
-    LOG_MAX_BACKUP_INDEX=20
+  GEOSERVER_UID=1000 \
+  GEOSERVER_GID=1000 \
+  USER=geoserver \
+  GROUP_NAME=geoserver \
+  GEOSERVER_HOME=/geoserver \
+  GEOSERVER_DATA_DIR=/geoserver/data \
+  GEOWEBCACHE_CACHE_DIR=/geoserver/data/gwc \
+  COMMUNITY_PLUGINS_DIR=/geoserver/community_plugins  \
+  EXTRA_CONFIG_DIR=/geoserver/extra_settings \
+  STABLE_PLUGINS_DIR=/geoserver/stable_plugins \
+  RUN_AS_ROOT=true \
+  LOG_MAX_FILE_SIZE=5MB \
+  LOG_MAX_BACKUP_INDEX=20
 
 RUN groupadd -r geoserver -g 1000
 RUN useradd -l -m -d /home/geoserver -u 1000 --gid 1000 -s /bin/bash -G geoserver geoserver

@@ -5,19 +5,25 @@ on:
     branches: [main]
 
 env:
-  STABLE_VERSION: '2.26'
+  STABLE_VERSION: '2.25'
+  LATEST_VERSION: '2.26'
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-push-image:
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        version: ['2.26', '2.25']
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     defaults:
       run:
-        working-directory: ${{ env.STABLE_VERSION }}
+        working-directory: ${{ matrix.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,8 +48,20 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ${{ env.STABLE_VERSION }}
+          context: ${{ matrix.version }}
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.metadata.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.STABLE_VERSION }}
+          push: false
+          tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
+      - name: Tag latest version
+        if: ${{ matrix.version == env.LATEST_VERSION }}
+        run: |
+          echo Tagging ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      - name: Tag stable version
+        if: ${{ matrix.version == env.STABLE_VERSION }}
+        run: |
+          echo Tagging ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:stable
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:stable
+      - name: Docker image push
+        run: docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
