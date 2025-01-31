@@ -43,25 +43,22 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          flavor: |
-            latest=true
-      - name: Build and push Docker image
+          flavor: latest=false
+      - name: Build and push Docker image (latest)
+        if: ${{ matrix.version == env.LATEST_VERSION }}
         uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.version }}
           platforms: linux/amd64,linux/arm64
-          push: false
-          tags: ${{ steps.metadata.outputs.tags }}
+          tags: ${{ steps.metadata.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.LATEST_VERSION }}
           labels: ${{ steps.metadata.outputs.labels }}
-      - name: Tag latest version
-        if: ${{ matrix.version == env.LATEST_VERSION }}
-        run: |
-          echo Tagging ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-      - name: Tag stable version
+          push: true
+      - name: Build and push Docker image (stable)
         if: ${{ matrix.version == env.STABLE_VERSION }}
-        run: |
-          echo Tagging ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:stable
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:stable
-      - name: Docker image push
-        run: docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.version }}
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.metadata.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:stable,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.STABLE_VERSION }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          push: true
